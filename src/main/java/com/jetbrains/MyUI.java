@@ -9,6 +9,8 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.ObjectProperty;
+import com.vaadin.data.util.PropertysetItem;
+import com.vaadin.data.util.converter.StringToIntegerConverter;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.*;
@@ -27,36 +29,38 @@ public class MyUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+        // ROOT LAYOUT
         final VerticalLayout rootLayout = new VerticalLayout();
-        final Label headline = new Label();
-        final TextField pizza = new TextField();
-        final TextField price = new TextField();
-        // Have a data model
-        ObjectProperty headlineText = new ObjectProperty("Pizza Shop",String.class);
-        // Have a component that implements Viewer
-        Label viewer = new Label();
-        TextField editor = new TextField("Edit Greeting");
-        // Bind it to the data
-        viewer.setPropertyDataSource(headlineText);
-        editor.setPropertyDataSource(headlineText);
 
-        viewer.setPropertyDataSource(editor);
-        // The value shown in the viewer is updated immediately
-        // after editing the value in the editor (once it
-        // loses the focus)
-        editor.setImmediate(true);
-//        pizza.addValueChangeListener(
-//                new Property.ValueChangeListener() {
-//                    @Override
-//                    public void valueChange(Property.ValueChangeEvent event) {
-//                        // Do something with the new value
-//                        rootLayout.addComponent(new Label(pizza.getValue()));
-//                    }
-//                });
+        // PROPERTY AND ITEM
+        final Property<Double> property = new ObjectProperty<Double>(13.0);
+        final PropertysetItem item = new PropertysetItem();
+
+        // COMPONENTS
+        final TextField textField = new TextField("TextField");
+        final Slider slider = new Slider(-50.0, 50.0, 1);
+        final Label label = new Label();
+
+        // ADDING A PROPERTY TO COMPONENTS [1. dimension]
+        textField.setPropertyDataSource(property);
+        textField.setImmediate(true);
+        slider.setPropertyDataSource(property);
+        label.setPropertyDataSource(property);
+
+        // ADDING PROPERTIES TO A ITEM [2. dimension]
+        item.addItemProperty("zahlensystem", new ObjectProperty("dezimal"));
+        item.addItemProperty("wert", property);
 
 
+        // Bind it to a component
+        Form form = new Form();
+        form.setItemDataSource(item);
 
-        rootLayout.addComponents(headline,pizza);
+        // Nicer captions
+        form.getField("zahlensystem").setCaption("Zahlensystem: ");
+        form.getField("wert").setCaption("Wert: ");
+
+        rootLayout.addComponents(textField,slider,label,form);
         rootLayout.setMargin(true);
         rootLayout.setSpacing(true);
         setContent(rootLayout);
