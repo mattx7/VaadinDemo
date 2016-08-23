@@ -1,6 +1,7 @@
 package com.jetbrains;
 
 import javax.servlet.annotation.WebServlet;
+import javax.validation.ValidationException;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.Size;
 
@@ -10,9 +11,11 @@ import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.data.Property;
+import com.vaadin.data.Validator;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.data.util.converter.StringToIntegerConverter;
+import com.vaadin.data.validator.DoubleRangeValidator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.*;
@@ -52,9 +55,9 @@ public class MyUI extends UI {
         textField.setPropertyDataSource(pizzaPrice);
         slider.setPropertyDataSource(pizzaPrice);
         label.setPropertyDataSource(pizzaPrice);
-
         textField.setImmediate(true);
-
+        textField.addValidator(new DoubleRangeValidator("Preis stimmt nicht",-99.99,99.99));
+        slider.addValidator(new DoubleRangeValidator("Preis stimmt nicht",-5.0,5.0));
         // ADDING PROPERTIES TO A ITEM [2. dimension]
         item.addItemProperty("name", pizzanName);
         item.addItemProperty("wert", pizzaPrice);

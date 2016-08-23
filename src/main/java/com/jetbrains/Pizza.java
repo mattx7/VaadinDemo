@@ -1,7 +1,12 @@
 package com.jetbrains;
 
+import com.vaadin.data.Validator;
 import com.vaadin.data.validator.DoubleRangeValidator;
+import com.vaadin.ui.Notification;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Currency;
 
 /**
@@ -9,9 +14,10 @@ import java.util.Currency;
  */
 public class Pizza {
 
-    private DoubleRangeValidator validator = new DoubleRangeValidator("Preis stimmt nicht",0.0,99999.99999);
     private Double price;
     private String name;
+
+
 
     public Pizza(String name, Double price){
         this.price = price;
@@ -22,7 +28,7 @@ public class Pizza {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Double price) throws Validator.InvalidValueException {
         this.price = price;
     }
 
@@ -33,4 +39,5 @@ public class Pizza {
     public void setName(String name) {
         this.name = name;
     }
+
 }
