@@ -38,7 +38,7 @@ public class MyUI extends UI {
         final Pizza pizza = new Pizza("Margarita",13.0);
 
 
-        // ROOT LAYOUT
+        // ROOT LAYOUTT
         final VerticalLayout rootLayout = new VerticalLayout();
 
         // PROPERTY AND ITEM
