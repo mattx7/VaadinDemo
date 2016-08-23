@@ -1,6 +1,8 @@
 package com.jetbrains;
 
 import javax.servlet.annotation.WebServlet;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.Size;
 
 import com.sun.org.apache.xpath.internal.operations.String;
 import com.vaadin.annotations.Theme;
@@ -29,27 +31,33 @@ public class MyUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+
+        final Pizza pizza = new Pizza("Margarita",13.0);
+
+
         // ROOT LAYOUT
         final VerticalLayout rootLayout = new VerticalLayout();
 
         // PROPERTY AND ITEM
-        final Property<Double> property = new ObjectProperty<Double>(13.0);
+        final Property         pizzanName = new ObjectProperty(pizza.getName());
+        final Property<Double> pizzaPrice = new ObjectProperty<Double>(pizza.getPrice());
         final PropertysetItem item = new PropertysetItem();
 
         // COMPONENTS
         final TextField textField = new TextField("TextField");
-        final Slider slider = new Slider(-50.0, 50.0, 1);
-        final Label label = new Label();
+        final Slider    slider    = new Slider(-50.0, 50.0, 1);
+        final Label     label     = new Label();
 
         // ADDING A PROPERTY TO COMPONENTS [1. dimension]
-        textField.setPropertyDataSource(property);
+        textField.setPropertyDataSource(pizzaPrice);
+        slider.setPropertyDataSource(pizzaPrice);
+        label.setPropertyDataSource(pizzaPrice);
+
         textField.setImmediate(true);
-        slider.setPropertyDataSource(property);
-        label.setPropertyDataSource(property);
 
         // ADDING PROPERTIES TO A ITEM [2. dimension]
-        item.addItemProperty("zahlensystem", new ObjectProperty("dezimal"));
-        item.addItemProperty("wert", property);
+        item.addItemProperty("name", pizzanName);
+        item.addItemProperty("wert", pizzaPrice);
 
 
         // Bind it to a component
@@ -57,8 +65,9 @@ public class MyUI extends UI {
         form.setItemDataSource(item);
 
         // Nicer captions
-        form.getField("zahlensystem").setCaption("Zahlensystem: ");
+        form.getField("name").setCaption("Name: ");
         form.getField("wert").setCaption("Wert: ");
+        form.setReadOnly(true);
 
         rootLayout.addComponents(textField,slider,label,form);
         rootLayout.setMargin(true);
